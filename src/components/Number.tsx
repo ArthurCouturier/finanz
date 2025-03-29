@@ -1,6 +1,7 @@
 import NumberFlow from "@number-flow/react";
 import { Slider } from "./ui/slider";
 import { Button } from "./ui/button";
+import { useEffect, useRef, useState } from "react";
 
 export default function Number({
     title,
@@ -24,6 +25,9 @@ export default function Number({
     clasName?: string;
 }) {
 
+    const [editing, setEditing] = useState(false)
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const handleChange = (newValue: number[]) => {
         setValue(newValue[0])
     }
@@ -44,13 +48,59 @@ export default function Number({
         }
     }
 
+    useEffect(() => {
+        if (editing && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [editing]);
+
     return (
         <div className={clasName}>
             <div className="flex mx-auto justify-center">
                 {title && <h2 className="text-lg font-bold mr-0.5">{title}</h2>}
                 {subtitle && <h3 className="flex text-sm mt-1 ml-0.5 opacity-80">{subtitle}</h3>}
             </div>
-            <NumberFlow value={value} trend={0} />
+            <div>
+                <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    className="mx-auto"
+                    onClick={() => {
+                        setEditing(true)
+                        window.addEventListener("keydown", (e) => {
+                            if (e.key === "Enter") {
+                                setEditing(false)
+                                window.removeEventListener("keydown", () => { })
+                            }
+                        })
+                    }}
+                >
+                    {editing ? (
+                        <input
+                            ref={inputRef}
+                            type="number"
+                            className="w-20 text-center focus:outline-none"
+                            value={value}
+                            onChange={(e) => {
+                                let newValue = parseFloat(e.target.value)
+                                if (!isNaN(newValue)) {
+                                    newValue = Math.max(min!, Math.min(max!, newValue))
+                                    setValue(newValue)
+                                } if (isNaN(newValue)) {
+                                    setValue(min!)
+                                }
+                            }}
+                            onBlur={() => setEditing(false)}
+                            min={min}
+                            max={max}
+                            step={step}
+                            placeholder={defaultValue?.toString()}
+                        />
+                    ) : (
+                        <NumberFlow value={value} trend={0} />
+                    )}
+                </Button>
+            </div>
             <div className="flex">
                 <Button
                     size={"sm"}
