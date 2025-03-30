@@ -12,7 +12,7 @@ export default function Number({
     max,
     step,
     defaultValue,
-    clasName,
+    className,
 }: {
     title?: string;
     subtitle?: string;
@@ -22,7 +22,7 @@ export default function Number({
     max?: number;
     step?: number;
     defaultValue?: number;
-    clasName?: string;
+    className?: string;
 }) {
 
     const [editing, setEditing] = useState(false)
@@ -55,7 +55,7 @@ export default function Number({
     }, [editing]);
 
     return (
-        <div className={clasName}>
+        <div className={`my-2 ${className}`}>
             <div className="flex mx-auto justify-center">
                 {title && <h2 className="text-lg font-bold mr-0.5">{title}</h2>}
                 {subtitle && <h3 className="flex text-sm mt-1 ml-0.5 opacity-80">{subtitle}</h3>}
