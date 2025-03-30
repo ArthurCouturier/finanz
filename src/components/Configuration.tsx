@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import ConfigInterface from "@/interfaces/ConfigInterface";
 import ConfigService from "@/services/ConfigService";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
+import CircleDiagram from "./CircleDiagram";
 
 export default function Configuration({
     config
@@ -36,6 +38,7 @@ export default function Configuration({
             total: { ...config.total, value: computeTotal() },
             updatedAt: new Date(),
         })
+        toast.success("Configuration saved")
     }
 
     return (
@@ -79,6 +82,7 @@ export default function Configuration({
                     step={1}
                 />
                 <NumberFlow value={total} className="text-2xl font-bold" />
+                <CircleDiagram taxs={[tax]} />
                 <Button
                     className="mt-4"
                     onClick={handleSave}
