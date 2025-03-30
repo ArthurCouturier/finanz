@@ -14,11 +14,14 @@ export default function Configuration({
     config: ConfigInterface
 }) {
     const [tjm, setTjm] = useState(config.tjm.value)
-    const [tax, setTax] = useState(config.tax[0].value)
+    const [tax, setTax] = useState(config.tax)
     const [workedDays, setWorkedDays] = useState(config.workedDays[0].value)
 
     const computeTotal = () => {
-        const tjmWithTax = tjm * (1 - tax / 100)
+        let tjmWithTax: number = tjm
+        for (const t of tax) {
+            tjmWithTax -= (t.value / 100) * tjm
+        }
         const total = tjmWithTax * workedDays
         return total
     }
@@ -33,7 +36,7 @@ export default function Configuration({
         ConfigService.setConfig({
             ...config,
             tjm: { ...config.tjm, value: tjm },
-            tax: [{ ...config.tax[0], value: tax }],
+            tax: tax,
             workedDays: [{ ...config.workedDays[0], value: workedDays }],
             total: { ...config.total, value: computeTotal() },
             updatedAt: new Date(),
@@ -42,7 +45,7 @@ export default function Configuration({
     }
 
     return (
-        <Card className="max-w-fit aspect-square">
+        <Card className="h-fit">
             <CardHeader>
                 <CardTitle>
                     <h2>{config.name}</h2>
@@ -51,7 +54,7 @@ export default function Configuration({
             <CardContent className="flex flex-col items-center justify-center h-max">
                 <Number
                     title="TJM"
-                    subtitle="(H.T.)"
+                    subtitle="(T.T.C.)"
                     className="w-45"
                     value={tjm}
                     setValue={setTjm}
@@ -60,17 +63,31 @@ export default function Configuration({
                     max={1000}
                     step={5}
                 />
-                <Number
-                    title="Taxes"
-                    subtitle="%"
-                    className="w-45"
-                    value={tax}
-                    setValue={setTax}
-                    defaultValue={tax}
-                    min={0}
-                    max={100}
-                    step={0.5}
-                />
+                <div className="flex max-w-full overflow-x-auto whitespace-nowrap">
+                    {tax.map((t, index) => (
+                        <Number
+                            title="Taxes"
+                            subtitle="%"
+                            className="min-w-45 w-45 mx-10"
+                            value={t.value}
+                            setValue={(newValue) => {
+                                tax[index].value = newValue
+                                setTax([...tax])
+                            }}
+                            defaultValue={t.value}
+                            min={0}
+                            max={100}
+                            step={0.5}
+                        />
+                    ))}
+                </div>
+                <Button
+                    onClick={() => {
+                        setTax([...tax, { ...tax[0], value: 0 }])
+                    }}
+                >
+                    Ajouter une taxe
+                </Button>
                 <Number
                     title="Worked days"
                     className="w-45"
@@ -82,12 +99,12 @@ export default function Configuration({
                     step={1}
                 />
                 <NumberFlow value={total} className="text-2xl font-bold" />
-                <CircleDiagram taxs={[tax]} />
+                <CircleDiagram taxs={tax.map((t) => t.value)} />
                 <Button
                     className="mt-4"
                     onClick={handleSave}
                 >
-                    Save
+                    Sauvegarder
                 </Button>
             </CardContent>
         </Card>
