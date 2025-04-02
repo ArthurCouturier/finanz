@@ -1,12 +1,13 @@
 import NumberFlow from "@number-flow/react";
 import Number from "./Number";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import ConfigInterface from "@/interfaces/ConfigInterface";
 import ConfigService from "@/services/ConfigService";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import CircleDiagram from "./CircleDiagram";
+import { Switch } from "./ui/switch";
 
 export default function Configuration({
     config
@@ -16,29 +17,44 @@ export default function Configuration({
     const [tjm, setTjm] = useState(config.tjm.value)
     const [tax, setTax] = useState(config.tax)
     const [workedDays, setWorkedDays] = useState(config.workedDays[0].value)
+    const [inclTjmTVA, setInclTjmTVA] = useState(config.inclTjmTVA)
+    const [inclTotalTVA, setInclTotalTVA] = useState(config.inclTotalTVA)
 
-    const computeTotal = () => {
-        let tjmWithTax: number = tjm
+    const computeNetTotal = () => {
+        let tjmWithoutTax: number = inclTjmTVA ? tjm / 1.2 : tjm
         for (const t of tax) {
-            tjmWithTax -= (t.value / 100) * tjm
+            tjmWithoutTax -= (t.value / 100) * tjm
         }
-        const total = tjmWithTax * workedDays
+        const total = tjmWithoutTax * workedDays
         return total
     }
 
-    const [total, setTotal] = useState(computeTotal())
+    const [netTotal, setNetTotal] = useState(computeNetTotal())
+
+    const computeGrossTotal = () => {
+        const total = tjm * workedDays
+        if (!inclTjmTVA && inclTotalTVA) {
+            return total * 1.2
+        }
+        return total
+    }
+
+    const [grossTotal, setGrossTotal] = useState(computeGrossTotal())
 
     useEffect(() => {
-        setTotal(computeTotal())
-    }, [tjm, tax, workedDays])
+        setNetTotal(computeNetTotal())
+        setGrossTotal(computeGrossTotal())
+    }, [tjm, inclTjmTVA, tax, inclTotalTVA, workedDays])
 
     const handleSave = () => {
         ConfigService.setConfig({
             ...config,
             tjm: { ...config.tjm, value: tjm },
             tax: tax,
+            inclTjmTVA: inclTjmTVA,
             workedDays: [{ ...config.workedDays[0], value: workedDays }],
-            total: { ...config.total, value: computeTotal() },
+            total: { ...config.total, value: computeNetTotal() },
+            inclTotalTVA: inclTotalTVA,
             updatedAt: new Date(),
         })
         toast.success("Configuration saved")
@@ -52,17 +68,21 @@ export default function Configuration({
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center h-max">
-                <Number
-                    title="TJM"
-                    subtitle="(T.T.C.)"
-                    className="w-45"
-                    value={tjm}
-                    setValue={setTjm}
-                    defaultValue={tjm}
-                    min={0}
-                    max={1000}
-                    step={5}
-                />
+                <div className="flex items-center">
+                    <Number
+                        title="TJM"
+                        subtitle={inclTjmTVA ? "(TTC)" : "(H.T.)"}
+                        className="w-45"
+                        value={tjm}
+                        setValue={setTjm}
+                        defaultValue={tjm}
+                        min={0}
+                        max={1000}
+                        step={5}
+                    />
+                    <Switch className="mx-4" checked={inclTjmTVA} onCheckedChange={setInclTjmTVA} />
+                    <p>Incl. TVA</p>
+                </div>
                 <div className="flex max-w-full overflow-x-auto whitespace-nowrap">
                     {tax.map((t, index) => (
                         <Number
@@ -98,15 +118,26 @@ export default function Configuration({
                     max={365}
                     step={1}
                 />
-                <NumberFlow value={total} className="text-2xl font-bold" />
+                <p>Total net:</p>
+                <NumberFlow value={netTotal} className="text-2xl font-bold" />
+                {!inclTjmTVA && (
+                    <div className="flex">
+                        <Switch className="mx-4" checked={inclTotalTVA} onCheckedChange={setInclTotalTVA} />
+                        <p>Incl. TVA</p>
+                    </div>
+                )}
+                <p>Total brut:</p>
+                <NumberFlow value={grossTotal} className="text-2xl font-bold" />
                 <CircleDiagram taxs={tax.map((t) => t.value)} />
+            </CardContent>
+            <CardFooter className="flex items-center justify-center">
                 <Button
                     className="mt-4"
                     onClick={handleSave}
                 >
                     Sauvegarder
                 </Button>
-            </CardContent>
+            </CardFooter>
         </Card>
     );
 }
