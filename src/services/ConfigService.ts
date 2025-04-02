@@ -17,6 +17,7 @@ export default class ConfigService {
                 currency: "€",
                 value: 350,
             },
+            inclTjmTVA: true,
             tax: [{
                 uuid: uuidv4(),
                 title: "Tax",
@@ -38,6 +39,7 @@ export default class ConfigService {
                 currency: "€",
                 value: 0,
             },
+            inclTotalTVA: true,
             createdAt: new Date(),
             updatedAt: new Date(),
         };

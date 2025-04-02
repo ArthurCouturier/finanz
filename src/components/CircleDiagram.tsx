@@ -21,7 +21,7 @@ export default function CircleDiagram({
             <circle cx="100" cy="100" r={getRadFromPercent(100)} fill="var(--chart-5)"
                 className="hover:opacity-80 transition duration-300 ease-in-out"
             />
-            {taxs.map((t, index) => (
+            {taxs.map((_, index) => (
                 <>
                     <circle cx="100" cy="100" r={getRadFromPercent(100 - reduce[index])} stroke="var(--secondary)" strokeWidth="1" fill="var(--secondary)" />
                     <circle cx="100" cy="100" r={getRadFromPercent(100 - reduce[index])} stroke="var(--secondary)" strokeWidth="1" fill="var(--chart-5)"
