@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AbstractConfigInterface from "@/interfaces/configurations/AbstractConfigInterface";
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function ChooseConfig() {
     const { type } = useParams<{ type: string }>();
+    const navigateTo = useNavigate();
 
     let configService;
     switch (type) {
@@ -32,7 +33,12 @@ export default function ChooseConfig() {
 
     return (
         <Card>
-            <CardTitle>Configurations available</CardTitle>
+            <CardHeader className="relative">
+                <Button className="absolute left-4 -top-1.5 blue" onClick={() => { navigateTo("/") }}>
+                    Home
+                </Button>
+                <CardTitle>Configurations available</CardTitle>
+            </CardHeader>
             {allTypeConfigs.map((config) => {
                 return (
                     <CardContent>

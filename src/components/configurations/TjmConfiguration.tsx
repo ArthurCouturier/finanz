@@ -8,12 +8,15 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import CircleDiagram from "../CircleDiagram";
 import { Switch } from "../ui/switch";
+import { useNavigate } from "react-router-dom";
 
 export default function TjmConfiguration({
     config
 }: {
     config: TjmConfigInterface
 }) {
+    const navigateTo = useNavigate();
+
     const [tjm, setTjm] = useState(config.tjm.value)
     const [tax, setTax] = useState(config.tax)
     const [workedDays, setWorkedDays] = useState(config.workedDays[0].value)
@@ -62,10 +65,16 @@ export default function TjmConfiguration({
 
     return (
         <Card className="h-fit">
-            <CardHeader>
+            <CardHeader className="relative">
+                <Button className="absolute left-4 -top-1.5 blue" onClick={() => { navigateTo("/") }}>
+                    Home
+                </Button>
                 <CardTitle>
                     <h2>{config.name}</h2>
                 </CardTitle>
+                <Button className="absolute right-4 -top-1.5 blue" onClick={() => { navigateTo("/chooseConfig/tjm") }}>
+                    Change config
+                </Button>
             </CardHeader>
             <CardContent className="flex flex-col items-center justify-center h-max">
                 <div className="flex items-center">

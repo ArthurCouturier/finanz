@@ -7,13 +7,15 @@ import HouseConfigService from "@/services/configurations/HouseConfigService";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { Switch } from "../ui/switch";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function HouseConfiguration({
     config
 }: {
     config: HouseConfigInterface
 }) {
+    const navigateTo = useNavigate();
+
     const [name, setName] = useState(config.name)
     const [loanAmount, setLoanAmount] = useState(config.loanAmount.value)
     const [annualInterestRate, setAnnualInterestRate] = useState(config.annualInterestRate.value)
@@ -72,13 +74,14 @@ export default function HouseConfiguration({
     return (
         <Card className="h-fit">
             <CardHeader className="relative">
+                <Button className="absolute left-4 -top-1.5 blue" onClick={() => { navigateTo("/") }}>
+                    Home
+                </Button>
                 <CardTitle>
                     <h2><input className="text-center" value={name} onChange={(e) => setName(e.target.value)} /></h2>
                 </CardTitle>
-                <Button className="absolute right-4 -top-1.5 blue">
-                    <Link to="/chooseConfig/house">
-                        Change config
-                    </Link>
+                <Button className="absolute right-4 -top-1.5 blue" onClick={() => { navigateTo("/chooseConfig/house") }}>
+                    Change config
                 </Button>
             </CardHeader>
             <CardContent className="flex justify-center">
