@@ -14,6 +14,10 @@ const router = createBrowserRouter([
         element: <Tjm />
     },
     {
+        path: "/tjm/:uuid",
+        element: <Tjm />
+    },
+    {
         path: "/house",
         element: <House />
     },
