@@ -1,18 +1,18 @@
 import NumberFlow from "@number-flow/react";
-import Number from "./Number";
+import Number from "../Number";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
-import ConfigInterface from "@/interfaces/ConfigInterface";
-import ConfigService from "@/services/ConfigService";
-import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import TjmConfigInterface from "@/interfaces/configurations/TjmConfigInterface";
+import TjmConfigService from "@/services/configurations/TjmConfigService";
+import { Button } from "../ui/button";
 import { toast } from "sonner";
-import CircleDiagram from "./CircleDiagram";
-import { Switch } from "./ui/switch";
+import CircleDiagram from "../CircleDiagram";
+import { Switch } from "../ui/switch";
 
-export default function Configuration({
+export default function TjmConfiguration({
     config
 }: {
-    config: ConfigInterface
+    config: TjmConfigInterface
 }) {
     const [tjm, setTjm] = useState(config.tjm.value)
     const [tax, setTax] = useState(config.tax)
@@ -47,7 +47,7 @@ export default function Configuration({
     }, [tjm, inclTjmTVA, tax, inclTotalTVA, workedDays])
 
     const handleSave = () => {
-        ConfigService.setConfig({
+        TjmConfigService.getInstance().setConfig({
             ...config,
             tjm: { ...config.tjm, value: tjm },
             tax: tax,
