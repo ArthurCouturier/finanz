@@ -51,6 +51,7 @@ export default function HouseConfiguration({
         setMonthlyInsurancePayment(results.monthlyInsurancePayment)
         setTotalRepayment(results.totalRepayment)
         setTotalInterestCost(results.totalInterestCost)
+        setAnnualInsuranceRate(annualInsuranceRate)
     }, [loanAmount, annualInterestRate, loanTermMonths, preferLoanYear, annualInsuranceRate, inclInsurance])
 
     const handleSave = () => {

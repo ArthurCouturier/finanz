@@ -25,6 +25,7 @@ export default function ChooseConfig() {
 
     const handleAdd = () => {
         const newConfig: AbstractConfigInterface = configService.createEmptyConfig();
+        // @ts-ignore
         configService.setConfig(newConfig);
         setAllTypeConfigs(configService.getAllConfigs())
     }
