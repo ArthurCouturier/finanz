@@ -54,6 +54,25 @@ export default function Home() {
                     </Button>
                 </CardContent>
             </Card>
+            <Card className="w-[50vw] mx-auto">
+                <CardContent className="flex flex-col">
+                    <div>
+                        Restaurant 🧑‍🍳
+                    </div>
+                    <div>
+                        The Restaurant config helps you organize your menu, kitchen workflows, and daily operations.
+                    </div>
+                    <Button className="w-full mt-4" onClick={() => {
+                        if (HouseConfigService.getInstance().getAllConfigsIds().length > 1) {
+                            navigateTo("/chooseConfig/restaurant")
+                        } else {
+                            navigateTo("/restaurant")
+                        }
+                    }}>
+                        Configure
+                    </Button>
+                </CardContent>
+            </Card>
         </Card >
     )
 }
