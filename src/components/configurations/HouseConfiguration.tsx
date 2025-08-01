@@ -68,7 +68,7 @@ export default function HouseConfiguration({
             inclInsurance: inclInsurance,
             updatedAt: new Date(),
         })
-        toast.success("Configuration saved")
+        toast.success("Configuration Saved")
     }
 
     return (
@@ -152,7 +152,7 @@ export default function HouseConfiguration({
                     className="mt-4"
                     onClick={handleSave}
                 >
-                    Sauvegarder
+                    Save
                 </Button>
             </CardFooter>
         </Card>

@@ -62,7 +62,7 @@ export default function TjmConfiguration({
             inclTotalTVA: inclTotalTVA,
             updatedAt: new Date(),
         })
-        toast.success("Configuration saved")
+        toast.success("Configuration Saved")
     }
 
     return (
@@ -117,7 +117,7 @@ export default function TjmConfiguration({
                         setTax([...tax, { ...tax[0], value: 0 }])
                     }}
                 >
-                    Ajouter une taxe
+                    Add a tax
                 </Button>
                 <Number
                     title="Worked days"
@@ -146,7 +146,7 @@ export default function TjmConfiguration({
                     className="mt-4"
                     onClick={handleSave}
                 >
-                    Sauvegarder
+                    Save
                 </Button>
             </CardFooter>
         </Card>
