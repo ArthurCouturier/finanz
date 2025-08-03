@@ -108,7 +108,7 @@ export default function Number({
                 >-</Button>
                 <Slider
                     className="m-2"
-                    defaultValue={[defaultValue || 0]}
+                    defaultValue={[value]}
                     min={min}
                     max={max}
                     step={step}
