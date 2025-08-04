@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Card, CardTitle, CardContent, CardFooter } from "./ui/card";
 import Meal from "./Meal";
+import DayStatistics from "./modules/DayStatistics";
 
 export default function Day({
     day,
@@ -16,6 +17,7 @@ export default function Day({
 }) {
 
     const [showDetails, setShowDetails] = useState(false);
+    const [editMode, setEditMode] = useState(false);
 
     return (
         showDetails ?
@@ -23,7 +25,7 @@ export default function Day({
         className="mx-4 mt-2 pt-2 w-full h-full flex flex-col items-center" 
         onClick={() => setShowDetails(false)}> 
             <CardTitle className="justify-center flex items-center gap-2">
-                <h2 className="flex gap-2">
+                <h2 className="flex gap-2 text-2xl font-normal">
                     {day.name}
                 </h2>
                 <ArrowRightIcon className="w-6 h-6 text-text-primary rotate-90"/>
@@ -31,30 +33,43 @@ export default function Day({
             <CardContent 
             className="w-full gap-6 flex flex-col items-center " 
             onClick={(e) => e.stopPropagation()}>
-                <Meal 
-                    name={"Lunch Service"} 
+                <Meal
+                    editMode={editMode} 
+                    name={"Lunch Service ☀️"} 
                     meal={day.meals[0]} 
                     saveMeal={(meal: MealInterface) => 
                         day.meals[0] = meal}
                 />
                 <Meal 
-                    name={"Evening Service"} 
+                    editMode={editMode} 
+                    name={"Evening Service 🌙"} 
                     meal={day.meals[1]}
                     saveMeal={(meal: MealInterface) => 
                         day.meals[1] = meal}
                 />
             </CardContent>
             <CardFooter className="flex items-center justify-center">
+                { editMode ? 
                 <Button
                     className="mt-4"
                     onClick={(e) => {
                         e.stopPropagation(); 
                         saveConfig(day);
-                        toast.success("Configuration of " + day.name + " Saved")}}
+                        toast.success("Configuration of " + day.name + " Saved");
+                    setEditMode(false)}}
                 >
                     Save
                 </Button>
+                : <Button
+                className="mt-4"
+                onClick={(e) => {
+                    e.stopPropagation(); 
+                    setEditMode(true)}}
+                >
+                Edit
+            </Button> }
             </CardFooter>
+            <DayStatistics day={day}/>
         </Card>
         : <Button
         className="h-full flex flex-col items-center w-32"

@@ -10,6 +10,7 @@ export default function Number({
     setValue,
     min,
     max,
+    maxInput,
     step,
     defaultValue,
     className,
@@ -20,6 +21,7 @@ export default function Number({
     setValue: (value: number) => void;
     min?: number;
     max?: number;
+    maxInput?: number;
     step?: number;
     defaultValue?: number;
     className?: string;
@@ -84,7 +86,7 @@ export default function Number({
                             onChange={(e) => {
                                 let newValue = parseFloat(e.target.value)
                                 if (!isNaN(newValue)) {
-                                    newValue = Math.max(min!, Math.min(max!, newValue))
+                                    newValue = Math.max(min!, Math.min(maxInput ? maxInput! : max!, newValue))
                                     setValue(newValue)
                                 } if (isNaN(newValue)) {
                                     setValue(min!)
@@ -92,7 +94,7 @@ export default function Number({
                             }}
                             onBlur={() => setEditing(false)}
                             min={min}
-                            max={max}
+                            max={maxInput ? maxInput : max}
                             step={step}
                             placeholder={defaultValue?.toString()}
                         />

@@ -9,23 +9,23 @@ export default class RestaurantConfigService extends AbstractConfigService<Resta
 
     createEmptyConfig(): RestaurantConfigInterface {
         return {
-    uuid: uuidv4(),
-    name: "New Configuration",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    week: [
-            { name: "Monday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Tuesday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Wednesday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Thursday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Friday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Saturday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-            { name: "Sunday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
-        ],
-    stats: {
-        workedWeeks: 0
-    }
-}
+            uuid: uuidv4(),
+            name: "New Configuration",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            week: [
+                    { name: "Monday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Tuesday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Wednesday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Thursday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Friday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Saturday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                    { name: "Sunday", meals: [{ covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }, { covers: 0, starterPrice: 0, mainCoursePrice: 0, dessertPrice: 0, drinkPrice: 0 }] },
+                ],
+            stats: {
+                workedWeeks: 0
+            }
+        }
     }
 
     static getInstance(): RestaurantConfigService {
