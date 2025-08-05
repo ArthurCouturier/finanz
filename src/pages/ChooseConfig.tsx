@@ -6,6 +6,7 @@ import RestaurantConfigService from "@/services/configurations/RestaurantConfigS
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function ChooseConfig() {
     const { type } = useParams<{ type: string }>();
@@ -35,6 +36,13 @@ export default function ChooseConfig() {
         setAllTypeConfigs(configService.getAllConfigs())
     }
 
+    const onRemove = (uuid: string) => {
+        configService.removeConfigId(uuid);
+        const allTypeConfigsUpdate = allTypeConfigs.filter(config => config.uuid !== uuid);
+        setAllTypeConfigs(allTypeConfigsUpdate);
+        toast.success("Configuration removed")
+    }
+
     return (
         <Card>
             <CardHeader className="relative">
@@ -45,10 +53,16 @@ export default function ChooseConfig() {
             </CardHeader>
             {allTypeConfigs.map((config) => {
                 return (
-                    <CardContent>
+                    <CardContent className="flex items-center gap-2 justify-center">
                         <Link to={`/${type}/${config.uuid}`}>
                             {config.name}
                         </Link>
+                        <button
+                            className="hover:bg-zinc-200 dark:hover:bg-zinc-700 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
+                            onClick={() => { onRemove(config.uuid) }}
+                        >
+                            🗑
+                        </button>
                     </CardContent>
                 )
             })}
