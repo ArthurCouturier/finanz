@@ -53,7 +53,7 @@ export default function RestaurantConfiguration({
                         <input className="text-center" value={name} onChange={(e) => setName(e.target.value)} />
                     </h2>
                 </CardTitle>
-                <Button className="absolute right-4 -top-1.5 blue" onClick={() => navigateTo("/chooseConfig/tjm")}>
+                <Button className="absolute right-4 -top-1.5 blue" onClick={() => navigateTo("/chooseConfig/restaurant")}>
                     Change config
                 </Button>
             </CardHeader>

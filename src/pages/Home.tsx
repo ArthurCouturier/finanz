@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import HouseConfigService from "@/services/configurations/HouseConfigService";
+import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useNavigate } from "react-router-dom";
 
@@ -63,7 +64,7 @@ export default function Home() {
                         The Restaurant config helps you organize your menu, kitchen workflows, and daily operations.
                     </div>
                     <Button className="w-full mt-4" onClick={() => {
-                        if (HouseConfigService.getInstance().getAllConfigsIds().length > 1) {
+                        if (RestaurantConfigService.getInstance().getAllConfigsIds().length > 1) {
                             navigateTo("/chooseConfig/restaurant")
                         } else {
                             navigateTo("/restaurant")

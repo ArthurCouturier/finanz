@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AbstractConfigInterface from "@/interfaces/configurations/AbstractConfigInterface";
 import HouseConfigService from "@/services/configurations/HouseConfigService";
+import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -17,6 +18,9 @@ export default function ChooseConfig() {
             break;
         case "house":
             configService = HouseConfigService.getInstance();
+            break;
+        case "restaurant":
+            configService = RestaurantConfigService.getInstance();
             break;
         default:
             return <div>Type de configuration inconnu</div>;
