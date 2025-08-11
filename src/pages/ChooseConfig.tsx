@@ -1,3 +1,4 @@
+import { ImportConfigurationButton } from "@/components/buttons/DataImportButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AbstractConfigInterface from "@/interfaces/configurations/AbstractConfigInterface";
@@ -5,7 +6,7 @@ import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ChooseConfig() {
@@ -48,9 +49,13 @@ export default function ChooseConfig() {
     toast.success("Configuration removed");
   };
 
+  const handleFetchConfigurations = () => {
+    setAllTypeConfigs(configService.getAllConfigs());
+  };
+
   return (
     <Card>
-      <CardHeader className="relative">
+      <CardHeader className="relative ">
         <Button
           className="absolute left-4 -top-1.5 blue"
           onClick={() => {
@@ -60,13 +65,29 @@ export default function ChooseConfig() {
           Home
         </Button>
         <CardTitle>Configurations available</CardTitle>
+        <div className="absolute right-4 -top-1.5 blue flex flex-col gap-2">
+          <ImportConfigurationButton
+            fetchConfigs={handleFetchConfigurations}
+            configService={configService}
+            typeConfig={type}
+          />
+        </div>
       </CardHeader>
       {allTypeConfigs.map((config) => {
         return (
-          <CardContent className="flex items-center gap-2 justify-center">
-            <Link to={`/${type}/${config.uuid}`}>{config.name}</Link>
+          <CardContent
+            key={config.uuid}
+            className="flex items-center gap-2 justify-center"
+          >
             <button
-              className="hover:bg-zinc-200 dark:hover:bg-zinc-700 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
+              onClick={() => {
+                navigateTo(`/${type}/${config.uuid}`);
+              }}
+            >
+              {config.name}
+            </button>
+            <button
+              className="bg-red-400 hover:bg-red-500 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
               onClick={() => {
                 onRemove(config.uuid);
               }}
