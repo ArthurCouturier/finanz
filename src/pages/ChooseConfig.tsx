@@ -87,7 +87,7 @@ export default function ChooseConfig() {
               {config.name}
             </button>
             <button
-              className="bg-red-400 hover:bg-red-500 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
+              className="hover:bg-zinc-200 dark:hover:bg-zinc-700 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
               onClick={() => {
                 onRemove(config.uuid);
               }}
