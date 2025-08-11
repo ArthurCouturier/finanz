@@ -22,12 +22,12 @@ export default function DayStatistics({
     const totalOfEvening = getTotalOfTheMeal(day.meals[1]);
     
     return (
-        <div className="flex gap-6 w-full h-full">
-            <Card className="w-[70%] h-full p-4">
+        <div className="flex md:flex-row flex-col gap-6 w-full h-full">
+            <Card className="md:w-[70%] h-full p-4">
                 <CardTitle className="text-xl font-bold ">
                     Daily revenue 💰
                 </CardTitle>
-                <div className="flex justify-center gap-4">
+                <div className="flex md:flex-row flex-col justify-center gap-4">
                     <div className="flex flex-col">
                         <p className="text-xl mt-4"> Daily food : </p>
                         <div className="flex items-center justify-center gap-2">
@@ -64,7 +64,7 @@ export default function DayStatistics({
                 <CardTitle className="text-xl font-bold ">
                     Average baskets for the day 🧺
                 </CardTitle>
-                <div className="flex justify-center gap-4">
+                <div className="flex md:flex-row flex-col justify-center gap-4">
                     <div className="flex flex-col">
                         <p className="text-xl mt-4"> Average daily food per person : </p>
                         <div className="flex items-center justify-center gap-2">
