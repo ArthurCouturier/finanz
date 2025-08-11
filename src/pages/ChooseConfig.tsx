@@ -9,66 +9,76 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function ChooseConfig() {
-    const { type } = useParams<{ type: string }>();
-    const navigateTo = useNavigate();
+  const { type } = useParams<{ type: string }>();
+  const navigateTo = useNavigate();
 
-    let configService;
-    switch (type) {
-        case "tjm":
-            configService = TjmConfigService.getInstance();
-            break;
-        case "house":
-            configService = HouseConfigService.getInstance();
-            break;
-        case "restaurant":
-            configService = RestaurantConfigService.getInstance();
-            break;
-        default:
-            return <div>Type de configuration inconnu</div>;
-    }
+  let configService;
+  switch (type) {
+    case "tjm":
+      configService = TjmConfigService.getInstance();
+      break;
+    case "house":
+      configService = HouseConfigService.getInstance();
+      break;
+    case "restaurant":
+      configService = RestaurantConfigService.getInstance();
+      break;
+    default:
+      return <div>Type de configuration inconnu</div>;
+  }
 
-    const [allTypeConfigs, setAllTypeConfigs] = useState<AbstractConfigInterface[]>(configService.getAllConfigs())
+  const [allTypeConfigs, setAllTypeConfigs] = useState<
+    AbstractConfigInterface[]
+  >(configService.getAllConfigs());
 
-    const handleAdd = () => {
-        const newConfig: AbstractConfigInterface = configService.createEmptyConfig();
-        // @ts-ignore
-        configService.setConfig(newConfig);
-        setAllTypeConfigs(configService.getAllConfigs())
-    }
+  const handleAdd = () => {
+    const newConfig: AbstractConfigInterface =
+      configService.createEmptyConfig();
+    // @ts-ignore
+    configService.setConfig(newConfig);
+    setAllTypeConfigs(configService.getAllConfigs());
+  };
 
-    const onRemove = (uuid: string) => {
-        configService.removeConfigId(uuid);
-        const allTypeConfigsUpdate = allTypeConfigs.filter(config => config.uuid !== uuid); 
-        setAllTypeConfigs(allTypeConfigsUpdate); 
-        toast.success("Configuration removed")
-    }
+  const onRemove = (uuid: string) => {
+    configService.removeConfigId(uuid);
+    const allTypeConfigsUpdate = allTypeConfigs.filter(
+      (config) => config.uuid !== uuid
+    );
+    setAllTypeConfigs(allTypeConfigsUpdate);
+    toast.success("Configuration removed");
+  };
 
-    return (
-        <Card>
-            <CardHeader className="relative">
-                <Button className="absolute left-4 -top-1.5 blue" onClick={() => { navigateTo("/") }}>
-                    Home
-                </Button>
-                <CardTitle>Configurations available</CardTitle>
-            </CardHeader>
-            {allTypeConfigs.map((config) => {
-                return (
-                    <CardContent className="flex items-center gap-2 justify-center">
-                        <Link to={`/${type}/${config.uuid}`}>
-                            {config.name}
-                        </Link>
-                        <button
-                    className="bg-red-400 hover:bg-red-500 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
-                    onClick={() => {onRemove(config.uuid)}}
-                >
-                    🗑
-                </button>
-                    </CardContent>
-                )
-            })}
-            <CardContent>
-                <Button onClick={handleAdd}>Add a configuration</Button>
-            </CardContent>
-        </Card>
-    )
+  return (
+    <Card>
+      <CardHeader className="relative">
+        <Button
+          className="absolute left-4 -top-1.5 blue"
+          onClick={() => {
+            navigateTo("/");
+          }}
+        >
+          Home
+        </Button>
+        <CardTitle>Configurations available</CardTitle>
+      </CardHeader>
+      {allTypeConfigs.map((config) => {
+        return (
+          <CardContent className="flex items-center gap-2 justify-center">
+            <Link to={`/${type}/${config.uuid}`}>{config.name}</Link>
+            <button
+              className="hover:bg-zinc-200 dark:hover:bg-zinc-700 text-text-primary p-2 rounded-md transition duration-200 mx-2 my-auto h-6 w-6 flex items-center justify-center text-xs"
+              onClick={() => {
+                onRemove(config.uuid);
+              }}
+            >
+              🗑
+            </button>
+          </CardContent>
+        );
+      })}
+      <CardContent>
+        <Button onClick={handleAdd}>Add a configuration</Button>
+      </CardContent>
+    </Card>
+  );
 }
