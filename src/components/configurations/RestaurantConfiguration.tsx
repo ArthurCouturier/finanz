@@ -18,8 +18,8 @@ export default function RestaurantConfiguration({
 }: {
   config: RestaurantConfigInterface;
 }) {
-  const [showConfigWeek, setShowConfigWeek] = useState(false);
-  const [showStats, setShowStats] = useState(false);
+  const [showConfigWeek, setShowConfigWeek] = useState(true);
+  const [showStats, setShowStats] = useState(true);
 
   const navigateTo = useNavigate();
 
@@ -66,8 +66,7 @@ export default function RestaurantConfiguration({
           Change config
         </Button>
       </CardHeader>
-
-      <div className="flex justify-center">
+      <div className="w-full h-max flex justify-center">
         {showConfigWeek ? (
           <Card
             className="mx-4 mt-2 pt-2 w-full h-full"
@@ -111,7 +110,7 @@ export default function RestaurantConfiguration({
         )}
       </div>
 
-      <div className="flex justify-center">
+      <div className=" h-max w-full flex justify-center">
         {showStats ? (
           <Card
             className="mx-4 mt-2 pt-2 w-full h-full"

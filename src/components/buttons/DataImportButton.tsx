@@ -3,6 +3,7 @@ import RestaurantConfigService from "@/services/configurations/RestaurantConfigS
 import TjmConfigService from "@/services/configurations/TjmConfigService";
 import { useRef, ChangeEvent } from "react";
 import { z } from "zod";
+import { Button } from "../ui/button";
 
 function exportData(uuid: string, name: string) {
   const storedData = localStorage.getItem(uuid);
@@ -137,12 +138,12 @@ export function ExportConfigurationButton({
   };
 
   return (
-    <button
+    <Button
       onClick={handleExport}
       className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-sm"
     >
       Export
-    </button>
+    </Button>
   );
 }
 
@@ -172,12 +173,12 @@ export function ImportConfigurationButton({
 
   return (
     <>
-      <button
+      <Button
         onClick={handleImportClick}
         className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-sm mr-2"
       >
         Import
-      </button>
+      </Button>
 
       <input
         type="file"
