@@ -11,13 +11,7 @@ import {
 } from "@/modules/StatisticsPerDay";
 import { getTotalOfTheMeal } from "@/modules/StatisticsPerMeal";
 
-export default function DayStatistics({
-  day,
-  editMode,
-}: {
-  day: DayInterface;
-  editMode: boolean;
-}) {
+export default function DayStatistics({ day }: { day: DayInterface }) {
   const totalLunchOfTheDay = getTotalLunchOfTheDay(day);
   const totalDrinkOfTheDay = getTotalDrinkOfTheDay(day);
   const totalOfTheDay = getTotalOfTheDay(day);
@@ -31,25 +25,23 @@ export default function DayStatistics({
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
-      <Card className="h-full w-full p-4">
+      <Card className=" h-1/2 w-full">
         <CardTitle className=" font-bold ">Daily revenue 💰</CardTitle>
-        <div
-          className={`flex flex-col justify-center gap-4 ${
-            editMode ? "flex-row" : "flex-row"
-          }`}
-        >
-          <div className="flex flex-col">
-            <p className=" mt-4"> Daily food : </p>
-            <div className="flex items-center justify-center gap-2">
-              <NumberFlow value={totalLunchOfTheDay} className="font-bold" />
-              <p className=" font-bold">€</p>
+        <div className=" flex flex-col justify-center gap-4">
+          <div className=" flex justify-center gap-12 items-baseline">
+            <div className="flex flex-col">
+              <p className=" mt-4"> Daily food : </p>
+              <div className="flex items-center justify-center gap-2">
+                <NumberFlow value={totalLunchOfTheDay} className="font-bold" />
+                <p className=" font-bold">€</p>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col">
-            <p className=" mt-4"> Daily drinks : </p>
-            <div className="flex items-center justify-center gap-2">
-              <NumberFlow value={totalDrinkOfTheDay} className=" font-bold" />
-              <p className=" font-bold">€</p>
+            <div className="flex flex-col">
+              <p className=" mt-4"> Daily drinks : </p>
+              <div className="flex items-center justify-center gap-2">
+                <NumberFlow value={totalDrinkOfTheDay} className=" font-bold" />
+                <p className=" font-bold">€</p>
+              </div>
             </div>
           </div>
           <div className="flex flex-col">
@@ -62,15 +54,13 @@ export default function DayStatistics({
               <p>(</p>
               <NumberFlow value={totalOfMidday} />
               <p>€ lunch, </p>
-            </div>
-            <div className="flex items-center justify-center gap-2">
               <NumberFlow value={totalOfEvening} />
               <p>€ evening ) </p>
             </div>
           </div>
         </div>
       </Card>
-      <Card className="w-full h-full">
+      <Card className="w-full h-1/2">
         <CardTitle className=" font-bold ">
           Average baskets for the day 🧺
         </CardTitle>

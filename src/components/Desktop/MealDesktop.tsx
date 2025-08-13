@@ -1,10 +1,9 @@
 import MealInterface from "@/interfaces/MealInterface";
 import { getTotalAverage } from "@/modules/StatisticsPerMeal";
 import NumberFlow from "@number-flow/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "../ui/card";
-import { Slider } from "../ui/slider";
-import { Button } from "../ui/button";
+import { NumberRestaurant } from "../Number";
 
 export default function MealDesktop({
   name,
@@ -58,11 +57,9 @@ export default function MealDesktop({
   }, [covers, starterPrice, mainCoursePrice, dessertPrice, drinkPrice]);
 
   return (
-    <Card className="w-full px-4">
-      <div className="w-full" onClick={(e) => e.stopPropagation()}>
-        <div className="items-center justify-center mb-4 font-bold flex">
-          {name}
-        </div>
+    <Card className="w-full px-4 h-1/2">
+      <div className="h-full w-full" onClick={(e) => e.stopPropagation()}>
+        <div className="items-center justify-center font-bold flex">{name}</div>
         {editMode ? (
           <div className="flex flex-col w-full items-center gap-2">
             <div className="flex w-full gap-2 ">
@@ -121,7 +118,7 @@ export default function MealDesktop({
             </div>
           </div>
         ) : (
-          <div className="flex justify-between gap-2">
+          <div className="flex h-[60%] items-center justify-between gap-2">
             <div className="flex flex-col">
               <p> Covers </p>
               <NumberFlow value={covers} className="text-xl font-bold" />
@@ -153,125 +150,5 @@ export default function MealDesktop({
         </div>
       </div>
     </Card>
-  );
-}
-
-function NumberRestaurant({
-  title,
-  value,
-  setValue,
-  min,
-  max,
-  maxInput,
-  step,
-  defaultValue,
-  className,
-}: {
-  title?: string;
-  value: number;
-  setValue: (value: number) => void;
-  min?: number;
-  max?: number;
-  maxInput?: number;
-  step?: number;
-  defaultValue?: number;
-  className?: string;
-}) {
-  const [editing, setEditing] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleChange = (newValue: number[]) => {
-    setValue(newValue[0]);
-  };
-
-  const handleMinus = () => {
-    if (value - step! < min!) {
-      setValue(min!);
-    } else {
-      setValue(value - step!);
-    }
-  };
-
-  const handlePlus = () => {
-    if (value + step! > max!) {
-      setValue(max!);
-    } else {
-      setValue(value + step!);
-    }
-  };
-
-  useEffect(() => {
-    if (editing && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [editing]);
-
-  return (
-    <div className={`my-2 ${className}`}>
-      <div className="flex mx-auto justify-center">
-        {title && <h2 className=" mr-0.5">{title}</h2>}
-      </div>
-      <div>
-        <Button
-          variant={"ghost"}
-          size={"sm"}
-          className="mx-auto"
-          onClick={() => {
-            setEditing(true);
-            window.addEventListener("keydown", (e) => {
-              if (e.key === "Enter") {
-                setEditing(false);
-                window.removeEventListener("keydown", () => {});
-              }
-            });
-          }}
-        >
-          {editing ? (
-            <input
-              ref={inputRef}
-              type="number"
-              className="w-20 text-center focus:outline-none"
-              value={value}
-              onChange={(e) => {
-                let newValue = parseFloat(e.target.value);
-                if (!isNaN(newValue)) {
-                  newValue = Math.max(
-                    min!,
-                    Math.min(maxInput ? maxInput! : max!, newValue)
-                  );
-                  setValue(newValue);
-                }
-                if (isNaN(newValue)) {
-                  setValue(min!);
-                }
-              }}
-              onBlur={() => setEditing(false)}
-              min={min}
-              max={maxInput ? maxInput : max}
-              step={step}
-              placeholder={defaultValue?.toString()}
-            />
-          ) : (
-            <NumberFlow value={value} trend={0} />
-          )}
-        </Button>
-      </div>
-      <div className="flex">
-        <Button className="h-6 w-6" onClick={handleMinus}>
-          -
-        </Button>
-        <Slider
-          className="m-2"
-          defaultValue={[value]}
-          min={min}
-          max={max}
-          step={step}
-          onValueChange={handleChange}
-        />
-        <Button className="h-6 w-6" onClick={handlePlus}>
-          +
-        </Button>
-      </div>
-    </div>
   );
 }

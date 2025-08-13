@@ -2,7 +2,7 @@ import RestaurantConfigInterface from "@/interfaces/configurations/RestaurantCon
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle, CardFooter } from "../ui/card";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import DayInterface from "@/interfaces/DayInterface";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
@@ -41,6 +41,19 @@ export default function RestaurantConfiguration({
     setActualConfig(updatedConfig);
     toast.success("Configuration Saved");
   };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <Card className="h-fit">
@@ -125,13 +138,14 @@ export default function RestaurantConfiguration({
               onClick={(e) => e.stopPropagation()}
             >
               <AnnualStats
+                isMobile={isMobile}
                 config={actualConfig}
                 saveConfig={handleSave}
                 workedWeeks={workedWeeks}
                 setWorkedWeeks={setWorkedWeeks}
               />
-              <WeekStats config={actualConfig} />
-              <SuperNova config={actualConfig} />
+              <WeekStats isMobile={isMobile} config={actualConfig} />
+              <SuperNova isMobile={isMobile} config={actualConfig} />
             </div>
           </Card>
         ) : (

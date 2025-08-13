@@ -2,7 +2,6 @@ import DayInterface from "@/interfaces/DayInterface";
 import MealInterface from "@/interfaces/MealInterface";
 import { ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Card, CardTitle, CardContent, CardFooter } from "./ui/card";
 import Meal from "./Meal";
@@ -28,7 +27,7 @@ export default function Day({
         <ArrowRightIcon className="w-6 h-6 text-text-primary rotate-90" />
       </CardTitle>
       <CardContent
-        className="w-full gap-6 flex"
+        className="w-full gap-6 flex flex-col md:flex-row"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex w-full gap-4 flex-col items-center">
@@ -36,16 +35,22 @@ export default function Day({
             editMode={editMode}
             name={"Lunch Service ☀️"}
             meal={day.meals[0]}
-            saveMeal={(meal: MealInterface) => (day.meals[0] = meal)}
+            saveMeal={(meal: MealInterface) => {
+              day.meals[0] = meal;
+              saveConfig(day);
+            }}
           />
           <Meal
             editMode={editMode}
             name={"Evening Service 🌙"}
             meal={day.meals[1]}
-            saveMeal={(meal: MealInterface) => (day.meals[1] = meal)}
+            saveMeal={(meal: MealInterface) => {
+              day.meals[1] = meal;
+              saveConfig(day);
+            }}
           />
         </div>
-        <DayStatistics editMode={editMode} day={day} />
+        <DayStatistics day={day} />
       </CardContent>
       <CardFooter>
         {editMode ? (
@@ -53,12 +58,10 @@ export default function Day({
             className="mt-4 w-max"
             onClick={(e) => {
               e.stopPropagation();
-              saveConfig(day);
-              toast.success("Configuration of " + day.name + " Saved");
               setEditMode(false);
             }}
           >
-            Save
+            Leave edit mode
           </Button>
         ) : (
           <Button

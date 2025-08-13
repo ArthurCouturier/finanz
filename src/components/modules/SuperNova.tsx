@@ -13,8 +13,10 @@ import { Button } from "../ui/button";
 import { Card, CardTitle } from "../ui/card";
 
 export default function SuperNova({
+  isMobile,
   config,
 }: {
+  isMobile: boolean;
   config: RestaurantConfigInterface;
 }) {
   const [showDetails, setShowDetails] = useState(false);
@@ -32,7 +34,7 @@ export default function SuperNova({
   const averageBasket = getAverageBasketPerWeek(config.week);
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-[90%]">
       {showDetails ? (
         <Card
           className="mx-4 mt-2 pt-2 w-full h-full p-4"
@@ -42,50 +44,102 @@ export default function SuperNova({
             <h2 className="flex gap-2">SuperNova</h2>
             <ArrowRightIcon className="w-6 h-6 text-text-primary rotate-90" />
           </CardTitle>
-          <div
-            className="grid grid-cols-3 gap-y-6 gap-x-12 items-center mt-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex flex-col items-center">
-              <p className="">Annual revenue :</p>
-              <div className="w-full flex justify-center items-center">
-                <NumberFlow value={annualSales} className=" font-bold mx-1" />
-                <p className="font-bold ">€</p>
+          {isMobile ? (
+            <div
+              className="grid grid-cols-2 gap-y-6 gap-x-12 items-center mt-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {" "}
+              <div className="flex flex-col items-center">
+                <p className="">Annual revenue :</p>
+                <div className="w-full flex justify-center items-center">
+                  <NumberFlow value={annualSales} className=" font-bold mx-1" />
+                  <p className="font-bold ">€</p>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col items-center">
-              <p className=" max-w-64">Avg. table settings per working day :</p>
-              <NumberFlow
-                value={parseFloat(averageMealsPerDay)}
-                className=" font-bold"
-              />
-            </div>
-            <div className="flex flex-col items-center max-w-64">
-              <p className="">Avg. table settings per meal worked :</p>
-              <NumberFlow
-                value={parseFloat(averageMealsPerMeal)}
-                className=" font-bold"
-              />
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="">Number of days per year :</p>
-              <NumberFlow value={workedDays} className=" font-bold" />
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="">Table settings per year :</p>
-              <NumberFlow value={mealsCooked} className=" font-bold" />
-            </div>
-            <div className="flex flex-col items-center">
-              <p className="">Unit sale price (excl. tax) :</p>
-              <div className="flex items-center">
+              <div className="flex flex-col items-center">
+                <p className=" max-w-64">
+                  Avg. table settings per working day :
+                </p>
                 <NumberFlow
-                  value={parseFloat(averageBasket)}
+                  value={parseFloat(averageMealsPerDay)}
                   className=" font-bold"
                 />
-                <p className="font-bold ">€</p>
+              </div>
+              <div className="flex flex-col items-center max-w-64">
+                <p className="">Avg. table settings per meal worked :</p>
+                <NumberFlow
+                  value={parseFloat(averageMealsPerMeal)}
+                  className=" font-bold"
+                />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Number of days per year :</p>
+                <NumberFlow value={workedDays} className=" font-bold" />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Table settings per year :</p>
+                <NumberFlow value={mealsCooked} className=" font-bold" />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Unit sale price (excl. tax) :</p>
+                <div className="flex items-center">
+                  <NumberFlow
+                    value={parseFloat(averageBasket)}
+                    className=" font-bold"
+                  />
+                  <p className="font-bold ">€</p>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div
+              className="grid grid-cols-3 gap-y-6 gap-x-12 items-center mt-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col items-center">
+                <p className="">Annual revenue :</p>
+                <div className="w-full flex justify-center items-center">
+                  <NumberFlow value={annualSales} className=" font-bold mx-1" />
+                  <p className="font-bold ">€</p>
+                </div>
+              </div>
+              <div className="flex flex-col items-center">
+                <p className=" max-w-64">
+                  Avg. table settings per working day :
+                </p>
+                <NumberFlow
+                  value={parseFloat(averageMealsPerDay)}
+                  className=" font-bold"
+                />
+              </div>
+              <div className="flex flex-col items-center max-w-64">
+                <p className="">Avg. table settings per meal worked :</p>
+                <NumberFlow
+                  value={parseFloat(averageMealsPerMeal)}
+                  className=" font-bold"
+                />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Number of days per year :</p>
+                <NumberFlow value={workedDays} className=" font-bold" />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Table settings per year :</p>
+                <NumberFlow value={mealsCooked} className=" font-bold" />
+              </div>
+              <div className="flex flex-col items-center">
+                <p className="">Unit sale price (excl. tax) :</p>
+                <div className="flex items-center">
+                  <NumberFlow
+                    value={parseFloat(averageBasket)}
+                    className=" font-bold"
+                  />
+                  <p className="font-bold ">€</p>
+                </div>
+              </div>
+            </div>
+          )}
         </Card>
       ) : (
         <Button
