@@ -4,6 +4,7 @@ import House from "./pages/House";
 import ChooseConfig from "./pages/ChooseConfig";
 import Home from "./pages/Home";
 import Restaurant from "./pages/Restaurant";
+import Global from "./pages/Global";
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     {
         path: "/chooseConfig/:type",
         element: <ChooseConfig />
+    },
+    {
+        path: "/global",
+        element: <Global />
     }
 ]);
 

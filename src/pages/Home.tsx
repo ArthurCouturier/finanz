@@ -74,6 +74,20 @@ export default function Home() {
                     </Button>
                 </CardContent>
             </Card>
+            
+            <Card className="w-[50vw] mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
+                <CardContent className="flex flex-col">
+                    <div>
+                        Configuration Globale 🌍
+                    </div>
+                    <div>
+                        Mettez en concurrence et liez tous vos types de configuration pour une planification financière complète.
+                    </div>
+                    <Button className="w-full mt-4" onClick={() => navigateTo("/global")}>
+                        Planification Globale
+                    </Button>
+                </CardContent>
+            </Card>
         </Card >
     )
 }
