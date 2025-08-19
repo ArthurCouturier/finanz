@@ -4,6 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import GlobalComparisonService from "@/services/GlobalComparisonService";
+import GlobalComparisonResults from "@/components/GlobalComparisonResults";
+import { GlobalComparisonResult } from "@/interfaces/GlobalComparisonInterface";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +29,9 @@ export default function Global() {
         house: HouseConfigService.getInstance().getAllConfigs(),
         restaurant: RestaurantConfigService.getInstance().getAllConfigs()
     });
+
+    const [comparisonResult, setComparisonResult] = useState<GlobalComparisonResult | null>(null);
+    const [showComparison, setShowComparison] = useState(false);
 
     useEffect(() => {
         // Load saved global configuration from localStorage
@@ -63,10 +69,16 @@ export default function Global() {
     };
 
     const calculateGlobalProjection = () => {
-        // This would contain the logic to calculate financial projections
-        // based on all selected configurations
-        alert('Calcul de projection globale - À implémenter selon vos besoins spécifiques');
+        const result = GlobalComparisonService.getInstance().compareConfigurations(
+            globalConfig.tjm || undefined,
+            globalConfig.house || undefined,
+            globalConfig.restaurant || undefined
+        );
+        setComparisonResult(result);
+        setShowComparison(true);
     };
+
+    const hasSelectedConfigs = globalConfig.tjm || globalConfig.house || globalConfig.restaurant;
 
     return (
         <Card>
@@ -239,13 +251,13 @@ export default function Global() {
                             
                             <Button 
                                 onClick={calculateGlobalProjection}
-                                disabled={!globalConfig.tjm && !globalConfig.house && !globalConfig.restaurant}
+                                disabled={!hasSelectedConfigs}
                             >
                                 📈 Calculer projection globale
                             </Button>
                         </div>
                         
-                        {(globalConfig.tjm || globalConfig.house || globalConfig.restaurant) && (
+                        {hasSelectedConfigs && (
                             <div className="mt-4 p-4 bg-background rounded-lg border">
                                 <h4 className="font-medium mb-2">Configuration actuelle :</h4>
                                 <ul className="space-y-1 text-sm">
@@ -263,6 +275,27 @@ export default function Global() {
                         )}
                     </CardContent>
                 </Card>
+
+                {/* Résultats de comparaison */}
+                {showComparison && comparisonResult && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center justify-between">
+                                🔍 Analyse comparative et mise en concurrence
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => setShowComparison(false)}
+                                >
+                                    Masquer
+                                </Button>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <GlobalComparisonResults result={comparisonResult} />
+                        </CardContent>
+                    </Card>
+                )}
 
                 {/* Navigation */}
                 <div className="flex justify-center">
