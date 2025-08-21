@@ -148,7 +148,9 @@ export default class GlobalComparisonService {
     compareConfigurations(
         tjmConfigId?: string,
         houseConfigId?: string,
-        restaurantConfigId?: string
+        restaurantConfigId?: string,
+        restaurantRevenueConfigId?: string,
+        restaurantSpendingConfigId?: string
     ): GlobalComparisonResult {
         const configurations: ConfigurationComparison[] = [];
         let totalMonthlyIncome = 0;
@@ -201,8 +203,76 @@ export default class GlobalComparisonService {
             }
         }
         
-        // Analyse Restaurant
-        if (restaurantConfigId) {
+        // Analyse Restaurant - Gestion des configs séparées pour Mix
+        const restaurantRevenueId = restaurantRevenueConfigId || restaurantConfigId;
+        const restaurantSpendingId = restaurantSpendingConfigId || restaurantConfigId;
+        
+        // Analyse Restaurant (Revenus)
+        if (restaurantRevenueId) {
+            const restaurantConfig = RestaurantConfigService.getInstance().getConfig(restaurantRevenueId);
+            if (restaurantConfig.isPresent()) {
+                const config = restaurantConfig.get();
+                const metrics = this.calculateRestaurantMetrics(config);
+                
+                // Pour les revenus, on ne prend que la partie positive
+                const revenueMetrics = {
+                    ...metrics,
+                    monthlyExpenses: 0,
+                    monthlyProfit: metrics.monthlyIncome,
+                    annualExpenses: 0,
+                    annualProfit: metrics.annualIncome,
+                    profitMargin: 100
+                };
+                
+                configurations.push({
+                    configId: restaurantRevenueId,
+                    configName: config.name + (restaurantRevenueConfigId ? ' (Revenus)' : ''),
+                    configType: 'restaurant',
+                    metrics: revenueMetrics,
+                    riskLevel: this.assessRiskLevel('restaurant', revenueMetrics),
+                    details: {
+                        workedWeeks: config.stats.workedWeeks,
+                        weeklyRevenue: metrics.monthlyIncome * 12 / (config.stats.workedWeeks || 48),
+                        mode: 'revenue'
+                    }
+                });
+                totalMonthlyIncome += revenueMetrics.monthlyIncome;
+            }
+        }
+        
+        // Analyse Restaurant (Dépenses) - seulement si différent des revenus
+        if (restaurantSpendingId && restaurantSpendingId !== restaurantRevenueId) {
+            const restaurantConfig = RestaurantConfigService.getInstance().getConfig(restaurantSpendingId);
+            if (restaurantConfig.isPresent()) {
+                const config = restaurantConfig.get();
+                const metrics = this.calculateRestaurantMetrics(config);
+                
+                // Pour les dépenses, on ne prend que la partie négative
+                const spendingMetrics = {
+                    ...metrics,
+                    monthlyIncome: 0,
+                    monthlyProfit: -metrics.monthlyExpenses,
+                    annualIncome: 0,
+                    annualProfit: -metrics.annualExpenses,
+                    profitMargin: -100
+                };
+                
+                configurations.push({
+                    configId: restaurantSpendingId,
+                    configName: config.name + ' (Dépenses)',
+                    configType: 'restaurant',
+                    metrics: spendingMetrics,
+                    riskLevel: this.assessRiskLevel('restaurant', spendingMetrics),
+                    details: {
+                        workedWeeks: config.stats.workedWeeks,
+                        weeklyExpenses: metrics.monthlyExpenses * 12 / (config.stats.workedWeeks || 48),
+                        mode: 'spending'
+                    }
+                });
+                totalMonthlyExpenses += spendingMetrics.monthlyExpenses;
+            }
+        } else if (restaurantConfigId && !restaurantRevenueConfigId && !restaurantSpendingConfigId) {
+            // Mode classique : une seule config restaurant avec revenus et dépenses
             const restaurantConfig = RestaurantConfigService.getInstance().getConfig(restaurantConfigId);
             if (restaurantConfig.isPresent()) {
                 const config = restaurantConfig.get();
@@ -215,7 +285,8 @@ export default class GlobalComparisonService {
                     riskLevel: this.assessRiskLevel('restaurant', metrics),
                     details: {
                         workedWeeks: config.stats.workedWeeks,
-                        weeklyRevenue: metrics.monthlyIncome * 12 / (config.stats.workedWeeks || 48)
+                        weeklyRevenue: metrics.monthlyIncome * 12 / (config.stats.workedWeeks || 48),
+                        mode: 'mixed'
                     }
                 });
                 totalMonthlyIncome += metrics.monthlyIncome;

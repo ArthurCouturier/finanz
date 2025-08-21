@@ -5,6 +5,7 @@ import ChooseConfig from "./pages/ChooseConfig";
 import Home from "./pages/Home";
 import Restaurant from "./pages/Restaurant";
 import Global from "./pages/Global";
+import CategoryView from "./pages/CategoryView";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
     {
         path: "/global",
         element: <Global />
+    },
+    {
+        path: "/category/:category",
+        element: <CategoryView />
     }
 ]);
 
