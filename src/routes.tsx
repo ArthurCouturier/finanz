@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Restaurant from "./pages/Restaurant";
 import Global from "./pages/Global";
 import CategoryView from "./pages/CategoryView";
+import LifeSpending from "./pages/LifeSpending";
 
 const router = createBrowserRouter([
     {
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
     {
         path: "/category/:category",
         element: <CategoryView />
+    },
+    {
+        path: "/lifespending",
+        element: <LifeSpending />
+    },
+    {
+        path: "/lifespending/:uuid",
+        element: <LifeSpending />
     }
 ]);
 

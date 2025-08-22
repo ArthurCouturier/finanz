@@ -20,5 +20,6 @@ export const ConfigurationCategoryIcons = {
 export const ConfigurationTypeCategories = {
     tjm: ConfigurationCategory.REVENUE,
     house: ConfigurationCategory.SPENDING,
-    restaurant: ConfigurationCategory.MIX
+    restaurant: ConfigurationCategory.MIX,
+    lifespending: ConfigurationCategory.SPENDING
 } as const;

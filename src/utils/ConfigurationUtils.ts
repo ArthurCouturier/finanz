@@ -1,6 +1,6 @@
 import { ConfigurationCategory, ConfigurationTypeCategories } from "@/enums/ConfigurationCategory";
 
-export type ConfigurationType = 'tjm' | 'house' | 'restaurant';
+export type ConfigurationType = 'tjm' | 'house' | 'restaurant' | 'lifespending';
 
 export const getConfigurationCategory = (type: ConfigurationType): ConfigurationCategory => {
     return ConfigurationTypeCategories[type];

@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import { LifeSpendingService } from "@/services/LifeSpendingService";
 import GlobalComparisonService from "@/services/GlobalComparisonService";
 import GlobalComparisonResults from "@/components/GlobalComparisonResults";
 import { GlobalComparisonResult } from "@/interfaces/GlobalComparisonInterface";
@@ -16,6 +17,7 @@ interface GlobalConfiguration {
     tjm: string | null;
     house: string | null;
     restaurant: string | null;
+    lifespending: string | null;
     // Pour les configurations Mix, on peut avoir des configs différentes pour revenus et dépenses
     restaurantRevenue: string | null;
     restaurantSpending: string | null;
@@ -27,6 +29,7 @@ export default function Global() {
         tjm: null,
         house: null,
         restaurant: null,
+        lifespending: null,
         restaurantRevenue: null,
         restaurantSpending: null
     });
@@ -34,7 +37,8 @@ export default function Global() {
     const [availableConfigs, setAvailableConfigs] = useState({
         tjm: TjmConfigService.getInstance().getAllConfigs(),
         house: HouseConfigService.getInstance().getAllConfigs(),
-        restaurant: RestaurantConfigService.getInstance().getAllConfigs()
+        restaurant: RestaurantConfigService.getInstance().getAllConfigs(),
+        lifespending: LifeSpendingService.getInstance().getAllConfigs()
     });
 
     const [comparisonResult, setComparisonResult] = useState<GlobalComparisonResult | null>(null);
@@ -71,7 +75,8 @@ export default function Global() {
         setAvailableConfigs({
             tjm: TjmConfigService.getInstance().getAllConfigs(),
             house: HouseConfigService.getInstance().getAllConfigs(),
-            restaurant: RestaurantConfigService.getInstance().getAllConfigs()
+            restaurant: RestaurantConfigService.getInstance().getAllConfigs(),
+            lifespending: LifeSpendingService.getInstance().getAllConfigs()
         });
     };
 
@@ -90,7 +95,7 @@ export default function Global() {
         setShowComparison(true);
     };
 
-    const hasSelectedConfigs = globalConfig.tjm || globalConfig.house || globalConfig.restaurant || globalConfig.restaurantRevenue || globalConfig.restaurantSpending;
+    const hasSelectedConfigs = globalConfig.tjm || globalConfig.house || globalConfig.restaurant || globalConfig.lifespending || globalConfig.restaurantRevenue || globalConfig.restaurantSpending;
 
     return (
         <Card>
@@ -273,6 +278,56 @@ export default function Global() {
                                 </Card>
                             )}
                             
+                            {/* Life Spending Configuration */}
+                            {isConfigurationInCategory('lifespending', ConfigurationCategory.SPENDING) && (
+                                <Card>
+                                    <CardContent className="flex flex-col space-y-4 pt-4">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <h4 className="font-medium">Life Spending 💸</h4>
+                                                <p className="text-xs text-muted-foreground">
+                                                    Dépenses quotidiennes
+                                                </p>
+                                            </div>
+                                            <Button 
+                                                variant="outline" 
+                                                size="sm"
+                                                onClick={() => createNewConfig('lifespending')}
+                                            >
+                                                +
+                                            </Button>
+                                        </div>
+                                        
+                                        <Select 
+                                            value={globalConfig.lifespending || ""} 
+                                            onValueChange={(value: string) => handleConfigSelection('lifespending', value)}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner dépenses quotidiennes" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {availableConfigs.lifespending.map((config) => (
+                                                    <SelectItem key={config.uuid} value={config.uuid}>
+                                                        {config.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        
+                                        {globalConfig.lifespending && (
+                                            <Button 
+                                                variant="secondary" 
+                                                size="sm"
+                                                onClick={() => editConfig('lifespending', globalConfig.lifespending!)}
+                                                className="w-full"
+                                            >
+                                                Modifier
+                                            </Button>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            )}
+
                             {/* Restaurant Configuration (Dépenses) */}
                             {isConfigurationInCategory('restaurant', ConfigurationCategory.SPENDING) && (
                                 <Card>

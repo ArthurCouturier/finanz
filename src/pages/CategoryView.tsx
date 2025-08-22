@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import { LifeSpendingService } from "@/services/LifeSpendingService";
 import { ConfigurationCategory, ConfigurationCategoryLabels, ConfigurationCategoryIcons } from "@/enums/ConfigurationCategory";
 import { isConfigurationInCategory, ConfigurationType } from "@/utils/ConfigurationUtils";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +19,7 @@ export default function CategoryView() {
             case 'tjm': return TjmConfigService.getInstance();
             case 'house': return HouseConfigService.getInstance();
             case 'restaurant': return RestaurantConfigService.getInstance();
+            case 'lifespending': return LifeSpendingService.getInstance();
         }
     };
 
@@ -38,6 +40,11 @@ export default function CategoryView() {
                     title: 'Restaurant 🧑‍🍳',
                     description: 'The Restaurant config helps you organize your menu, kitchen workflows, and daily operations.'
                 };
+            case 'lifespending':
+                return {
+                    title: 'Life Spending 💸',
+                    description: 'The Life Spending config helps you track and plan your daily life expenses including groceries, rent, utilities, and more.'
+                };
         }
     };
 
@@ -50,7 +57,7 @@ export default function CategoryView() {
         }
     };
 
-    const availableTypes = ['tjm', 'house', 'restaurant'] as ConfigurationType[];
+    const availableTypes = ['tjm', 'house', 'restaurant', 'lifespending'] as ConfigurationType[];
     const filteredTypes = availableTypes.filter(type => 
         isConfigurationInCategory(type, currentCategory)
     );
