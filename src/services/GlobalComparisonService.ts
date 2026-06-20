@@ -5,6 +5,7 @@ import { ConfigurationComparison, FinancialMetrics, GlobalComparisonResult } fro
 import TjmConfigService from "./configurations/TjmConfigService";
 import HouseConfigService from "./configurations/HouseConfigService";
 import RestaurantConfigService from "./configurations/RestaurantConfigService";
+import { computeHouse } from "./HouseCalculationService";
 
 export default class GlobalComparisonService {
     private static instance: GlobalComparisonService;
@@ -37,19 +38,14 @@ export default class GlobalComparisonService {
     }
 
     calculateHouseMetrics(config: HouseConfigInterface): FinancialMetrics {
-        const loanAmount = config.loanAmount.value;
-        const annualRate = config.annualInterestRate.value / 100;
-        const loanTermMonths = config.loanTermMonths.value;
-        const insuranceRate = config.inclInsurance ? config.annualInsuranceRate.value / 100 : 0;
-        
-        // Calcul mensualité avec formule standard
-        const monthlyRate = annualRate / 12;
-        const monthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTermMonths)) / 
-                              (Math.pow(1 + monthlyRate, loanTermMonths) - 1);
-        
-        const monthlyInsurance = (loanAmount * insuranceRate) / 12;
-        const totalMonthlyExpenses = monthlyPayment + monthlyInsurance;
-        
+        // Nouveau modèle multi-crédits : on consolide via le moteur de calcul.
+        const computation = computeHouse(config);
+        const totalMonthlyExpenses = computation.monthlyTotal;
+        const longestTerm = computation.loanComputations.reduce(
+            (max, c) => Math.max(max, c.months),
+            0
+        );
+
         return {
             monthlyIncome: 0, // Immobilier génère pas de revenus directs dans ce modèle
             monthlyExpenses: totalMonthlyExpenses,
@@ -58,7 +54,7 @@ export default class GlobalComparisonService {
             annualExpenses: totalMonthlyExpenses * 12,
             annualProfit: -totalMonthlyExpenses * 12,
             profitMargin: -100, // Négatif car c'est une dépense
-            breakEvenPoint: loanTermMonths
+            breakEvenPoint: longestTerm
         };
     }
 
@@ -185,6 +181,7 @@ export default class GlobalComparisonService {
             if (houseConfig.isPresent()) {
                 const config = houseConfig.get();
                 const metrics = this.calculateHouseMetrics(config);
+                const computation = computeHouse(config);
                 configurations.push({
                     configId: houseConfigId,
                     configName: config.name,
@@ -193,9 +190,10 @@ export default class GlobalComparisonService {
                     riskLevel: this.assessRiskLevel('house', metrics),
                     timeToProfit: metrics.breakEvenPoint,
                     details: {
-                        loanAmount: config.loanAmount.value,
-                        interestRate: config.annualInterestRate.value,
-                        loanTerm: config.loanTermMonths.value
+                        loanAmount: computation.totalBorrowed,
+                        downPayment: computation.downPayment,
+                        purchasingPower: computation.purchasingPower,
+                        activeLoans: computation.loanComputations.length
                     }
                 });
                 totalMonthlyIncome += metrics.monthlyIncome;
