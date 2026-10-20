@@ -7,6 +7,7 @@ import Restaurant from "./pages/Restaurant";
 import Global from "./pages/Global";
 import CategoryView from "./pages/CategoryView";
 import LifeSpending from "./pages/LifeSpending";
+import Goal from "./pages/Goal";
 
 const router = createBrowserRouter([
     {
@@ -56,6 +57,14 @@ const router = createBrowserRouter([
     {
         path: "/lifespending/:uuid",
         element: <LifeSpending />
+    },
+    {
+        path: "/goal",
+        element: <Goal />
+    },
+    {
+        path: "/goal/:uuid",
+        element: <Goal />
     }
 ]);
 
