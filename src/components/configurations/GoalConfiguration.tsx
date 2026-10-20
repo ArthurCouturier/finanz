@@ -46,6 +46,7 @@ import {
   COMPARE_RATE_MAX,
   COMPARE_RATE_MIN,
   CONTRIBUTION_FREQUENCIES,
+  CONTRIBUTION_FREQUENCY_ORDER,
   ContributionFrequency,
   DEFAULT_PASSIVE_YIELD_RATE,
   GOAL_TYPE_PRESETS,
@@ -298,20 +299,32 @@ export default function GoalConfiguration({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {(Object.keys(CONTRIBUTION_FREQUENCIES) as ContributionFrequency[]).map(
-                  (f) => (
-                    <SelectItem key={f} value={f}>
-                      {CONTRIBUTION_FREQUENCIES[f].label}
-                    </SelectItem>
-                  )
-                )}
+                {CONTRIBUTION_FREQUENCY_ORDER.map((f) => (
+                  <SelectItem key={f} value={f}>
+                    {CONTRIBUTION_FREQUENCIES[f].label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          <p className="text-sm opacity-70">
+          <p className="max-w-xl text-center text-sm opacity-70">
             Soit{" "}
-            <span className="font-semibold">{fmtMoney(annualContribution(goal))}</span>{" "}
-            par an · {fmtMoney(result.totalInvested)} versés au total
+            {CONTRIBUTION_FREQUENCY_ORDER.filter((f) => f !== goal.contributionFrequency).map(
+              (f, i) => (
+                <span key={f}>
+                  {i > 0 && " · "}
+                  <span className="font-semibold">
+                    {fmtMoney(
+                      annualContribution(goal) / CONTRIBUTION_FREQUENCIES[f].periodsPerYear
+                    )}
+                  </span>{" "}
+                  {CONTRIBUTION_FREQUENCIES[f].unit}
+                </span>
+              )
+            )}
+            {" · "}
+            {fmtMoney(result.totalInvested)} versés au total sur{" "}
+            {Math.max(1, Math.round(goal.years))} ans
           </p>
         </div>
       </CardContent>
