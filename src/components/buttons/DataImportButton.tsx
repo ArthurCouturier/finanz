@@ -1,6 +1,7 @@
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import GoalConfigService from "@/services/configurations/GoalConfigService";
 import { useRef, ChangeEvent } from "react";
 import { z } from "zod";
 import { Button } from "../ui/button";
@@ -33,7 +34,8 @@ function importData(
   configService:
     | TjmConfigService
     | HouseConfigService
-    | RestaurantConfigService,
+    | RestaurantConfigService
+    | GoalConfigService,
   file: File,
   callback: () => void
 ) {
@@ -89,6 +91,24 @@ function importData(
     createdAt: z.string(),
     updatedAt: z.string(),
   });
+  const goalSchema = z.object({
+    uuid: z.string(),
+    name: z.string(),
+    type: z.string(),
+    financialIndependence: z.object({
+      startAmount: z.number(),
+      targetAmount: z.number(),
+      years: z.number(),
+      contribution: z.number(),
+      contributionFrequency: z.enum(["weekly", "monthly", "quarterly", "annual"]),
+      compareEnabled: z.boolean(),
+      compareRate: z.number(),
+      passiveYieldRate: z.number().optional(),
+      portfolio: z.unknown().optional(),
+    }),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  });
   const reader = new FileReader();
 
   reader.onload = (event) => {
@@ -105,6 +125,9 @@ function importData(
           break;
         case "house":
           houseSchema.parse(newConfig);
+          break;
+        case "goal":
+          goalSchema.parse(newConfig);
           break;
       }
 
@@ -157,7 +180,8 @@ export function ImportConfigurationButton({
   configService:
     | TjmConfigService
     | HouseConfigService
-    | RestaurantConfigService;
+    | RestaurantConfigService
+    | GoalConfigService;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

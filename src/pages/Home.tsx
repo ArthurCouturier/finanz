@@ -20,7 +20,7 @@ export default function Home() {
             </CardHeader>
             
             {/* Navigation par catégories */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-6 mb-6">
                 <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950 dark:to-emerald-950">
                     <CardContent className="flex flex-col p-6">
                         <div className="flex items-center gap-2 mb-2">
@@ -53,6 +53,24 @@ export default function Home() {
                             onClick={() => navigateToCategory(ConfigurationCategory.SPENDING)}
                         >
                             Gérer les dépenses
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-950 dark:to-purple-950">
+                    <CardContent className="flex flex-col p-6">
+                        <div className="flex items-center gap-2 mb-2">
+                            {ConfigurationCategoryIcons[ConfigurationCategory.GOAL]}
+                            <span className="font-semibold text-lg">{ConfigurationCategoryLabels[ConfigurationCategory.GOAL]}</span>
+                        </div>
+                        <div className="text-sm text-muted-foreground mb-4">
+                            Objectifs financiers et leur faisabilité (Indépendance financière)
+                        </div>
+                        <Button 
+                            className="w-full" 
+                            onClick={() => navigateToCategory(ConfigurationCategory.GOAL)}
+                        >
+                            Gérer les objectifs
                         </Button>
                     </CardContent>
                 </Card>

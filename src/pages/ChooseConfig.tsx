@@ -5,6 +5,7 @@ import AbstractConfigInterface from "@/interfaces/configurations/AbstractConfigI
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import GoalConfigService from "@/services/configurations/GoalConfigService";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -23,6 +24,9 @@ export default function ChooseConfig() {
       break;
     case "restaurant":
       configService = RestaurantConfigService.getInstance();
+      break;
+    case "goal":
+      configService = GoalConfigService.getInstance();
       break;
     default:
       return <div>Type de configuration inconnu</div>;

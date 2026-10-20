@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import HouseConfigService from "@/services/configurations/HouseConfigService";
 import RestaurantConfigService from "@/services/configurations/RestaurantConfigService";
 import TjmConfigService from "@/services/configurations/TjmConfigService";
+import GoalConfigService from "@/services/configurations/GoalConfigService";
 import { LifeSpendingService } from "@/services/LifeSpendingService";
 import { ConfigurationCategory, ConfigurationCategoryLabels, ConfigurationCategoryIcons } from "@/enums/ConfigurationCategory";
 import { isConfigurationInCategory, ConfigurationType } from "@/utils/ConfigurationUtils";
@@ -20,6 +21,7 @@ export default function CategoryView() {
             case 'house': return HouseConfigService.getInstance();
             case 'restaurant': return RestaurantConfigService.getInstance();
             case 'lifespending': return LifeSpendingService.getInstance();
+            case 'goal': return GoalConfigService.getInstance();
         }
     };
 
@@ -45,6 +47,11 @@ export default function CategoryView() {
                     title: 'Life Spending 💸',
                     description: 'The Life Spending config helps you track and plan your daily life expenses including groceries, rent, utilities, and more.'
                 };
+            case 'goal':
+                return {
+                    title: 'Indépendance financière 🏝️',
+                    description: 'Fixez un capital cible et une date, choisissez votre montant de départ et vos versements : découvrez le rendement annuel nécessaire et comparez-le à un taux de votre choix.'
+                };
         }
     };
 
@@ -57,7 +64,7 @@ export default function CategoryView() {
         }
     };
 
-    const availableTypes = ['tjm', 'house', 'restaurant', 'lifespending'] as ConfigurationType[];
+    const availableTypes = ['tjm', 'house', 'restaurant', 'lifespending', 'goal'] as ConfigurationType[];
     const filteredTypes = availableTypes.filter(type => 
         isConfigurationInCategory(type, currentCategory)
     );
