@@ -39,6 +39,14 @@ export const CONTRIBUTION_FREQUENCIES: Record<
   annual: { label: "Annuel", unit: "/ an", periodsPerYear: 1, max: 120000, step: 500 },
 };
 
+/** Display order of the contribution frequencies. */
+export const CONTRIBUTION_FREQUENCY_ORDER: ContributionFrequency[] = [
+  "weekly",
+  "monthly",
+  "quarterly",
+  "annual",
+];
+
 /** Non-linear slider exponent for € amount sliders (more travel for lower values). */
 export const AMOUNT_CURVE = 2;
 export const START_AMOUNT_MAX = 1_000_000;
